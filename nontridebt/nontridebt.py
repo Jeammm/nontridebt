@@ -2,19 +2,21 @@ from .exception import *
 from datetime import datetime
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+import os
 
 class Client():
   
-  def __init__(self, file_name, debt_sheet_name, credential="cerds.json"):
+  def __init__(self, file_name, debt_sheet_name):
 
     self.file_name = file_name
     self.debt_sheet = debt_sheet_name
-    self.session = self._create_session(credential)
+    self.session = self._create_session()
     self.member = ["พ้ง", "เว็บ", "อู๋","ป้อง"]
 
-  def _create_session(self, credential):
+  def _create_session(self):
     scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
-    cerds = ServiceAccountCredentials.from_json_keyfile_name(credential, scope)
+    credential_data = os.getenv("GOOGLE_CREDENTIALS_JSON")
+    cerds = ServiceAccountCredentials.from_json_keyfile_dict(credential_data, scope)
     session = gspread.authorize(cerds)
     return session
   
