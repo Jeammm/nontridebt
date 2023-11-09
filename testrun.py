@@ -1,8 +1,5 @@
-from __future__ import print_function
-from debtwrapper import TV
+from debtwrapper import Client
 
-popular = TV.popular()
+client = Client('สำเนาของ ปลดหนี้ (Responses)', 'Form Responses 1', "cerds.json")
 
-for number, show in enumerate(popular['results'], start=1):
-    print("{num}. {name} - {pop}".format(num=number,
-                                         name=show['name'], pop=show['popularity']))
+print(client.debt_list())

@@ -5,16 +5,16 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 class Client():
   
-  def __init__(self, file_name, debt_sheet_name):
-    
+  def __init__(self, file_name, debt_sheet_name, credential="cerds.json"):
+
     self.file_name = file_name
     self.debt_sheet = debt_sheet_name
-    self.session = self._create_session()
+    self.session = self._create_session(credential)
     self.member = ["พ้ง", "เว็บ", "อู๋","ป้อง"]
 
-  def _create_session(self):
+  def _create_session(self, credential):
     scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
-    cerds = ServiceAccountCredentials.from_json_keyfile_name("cerds.json", scope)
+    cerds = ServiceAccountCredentials.from_json_keyfile_name(credential, scope)
     session = gspread.authorize(cerds)
     return session
   
