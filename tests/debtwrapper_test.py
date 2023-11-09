@@ -1,32 +1,71 @@
-from debtwrapper import TV
+from debtwrapper import Client
 from pytest import fixture
-import vcr
 
 @fixture
-def tv_keys():
+def debt_keys():
     # Responsible only for returning the test data
-    return ['id', 'origin_country', 'poster_path', 'name',
-              'overview', 'popularity', 'backdrop_path',
-              'first_air_date', 'vote_count', 'vote_average']
+    return ['Timestamp', 'ชื่อเจ้าหนี้', 'ชื่อบิล', 'พ้ง', 'เว็บ',
+              'อู๋', 'ป้อง']
 
-@vcr.use_cassette('tests/vcr_cassettes/tv-info.yml', filter_query_parameters=['api_key'])
-def test_tv_info(tv_keys):
-    """Tests an API call to get a TV show's info"""
+def test_debt_list(debt_keys):
+    client = Client('สำเนาของ ปลดหนี้ (Responses)', 'Form Responses 1')
+    data = client.debt_list()
 
-    tv_instance = TV(1396)
-    response = tv_instance.info()
+    if len(data) > 0 :
+        assert isinstance(data, list)
+        assert set(debt_keys).issubset(data[0].keys())
 
-    assert isinstance(response, dict)
-    assert response['id'] == 1396, "The ID should be in the response"
-    assert set(tv_keys).issubset(response.keys()), "All keys should be in the response"
+def test_add_debt():
+    client = Client('สำเนาของ ปลดหนี้ (Responses)', 'Form Responses 1')
+    response = client.add_debt({
+      'ชื่อเจ้าหนี้': 'อู๋',
+      'ชื่อบิล': 'yayayayayayyaya',
+      'พ้ง': 4000,
+      'เว็บ': 40000,
+      'อู๋': 67,
+      'ป้อง': 2
+    })
 
-@vcr.use_cassette('tests/vcr_cassettes/tv-popular.yml', filter_query_parameters=['api_key'])
-def test_tv_popular(tv_keys):
-    """Tests an API call to get a popular tv shows"""
+    assert response["updates"]["updatedCells"] == 7
 
-    response = TV.popular()
+def test_add_debt_not_full():
+    client = Client('สำเนาของ ปลดหนี้ (Responses)', 'Form Responses 1')
+    response = client.add_debt({
+      'ชื่อเจ้าหนี้': 'อู๋',
+      'ชื่อบิล': 'just one',
+      'เว็บ': 4000,
+    })
 
-    assert isinstance(response, dict)
-    assert isinstance(response['results'], list)
-    assert isinstance(response['results'][0], dict)
-    assert set(tv_keys).issubset(response['results'][0].keys())
+    assert response["updates"]["updatedCells"] == 7
+
+def test_add_debt_not_sorted():
+    client = Client('สำเนาของ ปลดหนี้ (Responses)', 'Form Responses 1')
+    response = client.add_debt({
+      'ชื่อเจ้าหนี้': 'อู๋',
+      'ชื่อบิล': 'not sorted',
+      'อู๋': 67,
+      'เว็บ': 4000,
+      'พ้ง': 4000,
+    })
+
+    assert response["updates"]["updatedCells"] == 7
+
+def test_check_debt():
+    client = Client('สำเนาของ ปลดหนี้ (Responses)', 'Form Responses 1')
+    response = client.check_debt('เว็บ');
+
+    assert response["borrower"] == "เว็บ"
+    assert isinstance(response["amount"], dict)
+
+def test_check_debt_2():
+    client = Client('สำเนาของ ปลดหนี้ (Responses)', 'Form Responses 1')
+    response = client.check_debt('พ้ง');
+
+    assert response["borrower"] == "พ้ง"
+    assert isinstance(response["amount"], dict)
+
+def test_check_debt_3():
+    client = Client('สำเนาของ ปลดหนี้ (Responses)', 'Form Responses 1')
+    response = client.check_debt();
+
+    assert response["message"]

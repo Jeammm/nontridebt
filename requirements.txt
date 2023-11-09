@@ -1,3 +1,4 @@
 requests
 pytest
-vcrpy
+oauth2client
+gspread
