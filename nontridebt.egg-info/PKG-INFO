@@ -1,9 +1,9 @@
 Metadata-Version: 2.1
 Name: nontridebt
-Version: 0.1
+Version: 0.2
 Summary: Python API Wrapper Library for managing Villa Nontri gang's debt
 Home-page: https://github.com/Jeammm/nontridebt
-Download-URL: https://github.com/Jeammm/nontridebt/archive/refs/tags/v_01.tar.gz
+Download-URL: https://github.com/Jeammm/nontridebt/archive/refs/tags/v_02.tar.gz
 Author: Jeammm
 Author-email: athicha.phjkl@gmail.com
 License: MIT
@@ -20,3 +20,7 @@ Classifier: Programming Language :: Python :: 3.7
 Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 License-File: LICENSE.txt
+Requires-Dist: requests
+Requires-Dist: pytest
+Requires-Dist: oauth2client
+Requires-Dist: gspread
