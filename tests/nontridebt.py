@@ -1,4 +1,4 @@
-from debtwrapper import Client
+from nontridebt import Client
 from pytest import fixture
 
 @fixture

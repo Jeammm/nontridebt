@@ -1,0 +1,4 @@
+requests
+pytest
+oauth2client
+gspread
